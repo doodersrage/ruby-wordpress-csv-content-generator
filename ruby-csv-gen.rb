@@ -45,9 +45,6 @@ class ProcCSV
 		@default_content = CSV.open(@default_content, :encoding => 'windows-1251:utf-8').to_a
 	end
 
-	def format_results
-	end
-
 	def generate_content
 
 		# loop through available cities
