@@ -6,7 +6,7 @@ class ProcCSV
 	def initialize
 
 		# set default values
-		@cities_list = 'CitiesList.csv'
+		@cities_list = 'US-States-Cities.csv'
 		@default_content = 'defaultcontent.csv'
 		@replace_results = []
 		# default values
@@ -60,11 +60,20 @@ class ProcCSV
 				#loop though default content
 				@default_content.each { |content|
 					# walk through csv columns
-					content.each { |item|
+					content.each_with_index { |item, index|
 						# make sure not empty
 						if !item.nil? 
 							# add results to replace row
-							@replace_row.push(item.gsub( /(Dallas)/i, city[0].to_s))
+							if index == 1
+								content = item.gsub( /(Illinois)/i, city[1].to_s.strip).gsub( /(Chicago)/i, city[0].to_s.strip).downcase
+							else
+								content = item.gsub( /(Illinois)/i, city[1].to_s.strip).gsub( /(Chicago)/i, city[0].to_s.strip)
+							end
+							
+							@replace_row.push(content)
+							#@replace_row.push(item.gsub( /(Illinois)/i, city[1].to_s))
+							puts index;
+							puts city[1].to_s;
 						end
 					}
 				}
