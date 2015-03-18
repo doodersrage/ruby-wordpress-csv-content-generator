@@ -16,6 +16,7 @@ class ProcCSV
 		@default_post_status = 'publish'
 		@default_page_template = 'default'
 		@default_menu_order = 0
+		@post_file_cnt = 0
 
 		# store date and time
 		time = Time.new
@@ -32,9 +33,6 @@ class ProcCSV
 		# process list
 		generate_content
 
-		# save results
-		save_results
-
 	end
 
 	def gather_cites
@@ -46,6 +44,8 @@ class ProcCSV
 	end
 
 	def generate_content
+
+		curCnt = 0
 
 		# loop through available cities
 		@cities_list.each { |city|
@@ -71,9 +71,6 @@ class ProcCSV
 							end
 							
 							@replace_row.push(content)
-							#@replace_row.push(item.gsub( /(Illinois)/i, city[1].to_s))
-							puts index;
-							puts city[1].to_s;
 						end
 					}
 				}
@@ -99,11 +96,28 @@ class ProcCSV
 
 			# save results
 			@replace_results.push(@replace_row)
+		# write results at 1000 line count
+			if curCnt == 999
+				curCnt = 0
+				save_results
+				@replace_results = []
+				# set CSV headers
+				@csv_headers = ['post_type','post_title','post_slug','_aioseop_title','_aioseop_description','_aioseop_keywords','post_content','post_parent','post_author','post_date','post_status','wp_page_template','menu_order']
+				@replace_results.push(@csv_headers)
+			else 
+				curCnt += 1
+			end
 		}
+
+		# save results remainder
+		save_results
 	end
 
 	def save_results
-		CSV.open("results.csv", "wb") {|csv| 
+
+		@post_file_cnt += 1
+
+		CSV.open("results#{@post_file_cnt}.csv", "wb") {|csv| 
 			@replace_results.each {|key| 
 				csv << key
 			}
