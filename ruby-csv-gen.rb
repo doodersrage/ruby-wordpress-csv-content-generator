@@ -12,18 +12,22 @@ class ProcCSV
 		# default values
 		@default_post_type = 'page'
 		@default_parent = 0
-		@default_author = 1
+		@default_author = 'David Jones'
 		@default_post_status = 'publish'
 		@default_page_template = 'default'
 		@default_menu_order = 0
 		@post_file_cnt = 0
+		@per_doc_limit = 200
+		@wp_ping_status = 'open'
+		@wp_comment_status = 'open'
+		@cf__wp_page_template = 'template-services.php'
 
 		# store date and time
 		time = Time.new
 		@date_string = "#{time.month}/#{time.day}/#{time.year} #{time.hour}:#{time.min}"
 
 		# set CSV headers
-		@csv_headers = ['post_type','post_title','post_slug','_aioseop_title','_aioseop_description','_aioseop_keywords','post_content','post_parent','post_author','post_date','post_status','wp_page_template','menu_order']
+		@csv_headers = ['wp_ID','wp_post_type','wp_post_title','wp_post_name','cf__aioseop_title','cf__aioseop_description','cf__aioseop_keywords','wp_post_content','wp_post_parent','wp_post_author','wp_post_date','wp_post_status','wp_page_template','wp_menu_order','wp_ping_status','wp_comment_status','cf__wp_page_template']
 		@replace_results.push(@csv_headers)
 
 		# set default lists
@@ -51,6 +55,9 @@ class ProcCSV
 		@cities_list.each { |city|
 			# reset current arrow row
 			@replace_row = []
+
+			# add default blank id for new page
+			@replace_row.push('')
 
 			# add default post type
 			@replace_row.push(@default_post_type)
@@ -94,15 +101,24 @@ class ProcCSV
 			# assign default menu order
 			@replace_row.push(@default_menu_order)
 
+			# assign default ping status
+			@replace_row.push(@wp_ping_status)
+
+			# assign default comment status
+			@replace_row.push(@wp_comment_status)
+
+			# assign default page template
+			@replace_row.push(@cf__wp_page_template)
+
 			# save results
 			@replace_results.push(@replace_row)
 		# write results at 1000 line count
-			if curCnt == 999
+			if curCnt > @per_doc_limit
 				curCnt = 0
 				save_results
 				@replace_results = []
 				# set CSV headers
-				@csv_headers = ['post_type','post_title','post_slug','_aioseop_title','_aioseop_description','_aioseop_keywords','post_content','post_parent','post_author','post_date','post_status','wp_page_template','menu_order']
+				@csv_headers = ['wp_ID','wp_post_type','wp_post_title','wp_post_name','cf__aioseop_title','cf__aioseop_description','cf__aioseop_keywords','wp_post_content','wp_post_parent','wp_post_author','wp_post_date','wp_post_status','wp_page_template','wp_menu_order','wp_ping_status','wp_comment_status','cf__wp_page_template']
 				@replace_results.push(@csv_headers)
 			else 
 				curCnt += 1
