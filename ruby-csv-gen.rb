@@ -9,6 +9,7 @@ class ProcCSV
 		@cities_list = 'US-States-Cities.csv'
 		@default_content = 'defaultcontent.csv'
 		@replace_results = []
+		@def_csv_headers = ['wp_ID','wp_post_type','wp_post_title','wp_post_name','cf__aioseop_title','cf__aioseop_description','cf__aioseop_keywords','wp_post_content','wp_post_parent','wp_post_author','wp_post_date','wp_post_status','wp_page_template','wp_menu_order','wp_ping_status','wp_comment_status','cf__wp_page_template']
 		# default values
 		@default_post_type = 'page'
 		@default_parent = 0
@@ -27,7 +28,7 @@ class ProcCSV
 		@date_string = "#{time.month}/#{time.day}/#{time.year} #{time.hour}:#{time.min}"
 
 		# set CSV headers
-		@csv_headers = ['wp_ID','wp_post_type','wp_post_title','wp_post_name','cf__aioseop_title','cf__aioseop_description','cf__aioseop_keywords','wp_post_content','wp_post_parent','wp_post_author','wp_post_date','wp_post_status','wp_page_template','wp_menu_order','wp_ping_status','wp_comment_status','cf__wp_page_template']
+		@csv_headers = @def_csv_headers
 		@replace_results.push(@csv_headers)
 
 		# set default lists
@@ -118,7 +119,7 @@ class ProcCSV
 				save_results
 				@replace_results = []
 				# set CSV headers
-				@csv_headers = ['wp_ID','wp_post_type','wp_post_title','wp_post_name','cf__aioseop_title','cf__aioseop_description','cf__aioseop_keywords','wp_post_content','wp_post_parent','wp_post_author','wp_post_date','wp_post_status','wp_page_template','wp_menu_order','wp_ping_status','wp_comment_status','cf__wp_page_template']
+				@csv_headers = @def_csv_headers
 				@replace_results.push(@csv_headers)
 			else 
 				curCnt += 1
